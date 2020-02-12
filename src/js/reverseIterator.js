@@ -20,6 +20,10 @@ for (let i of reversedIterator) {
   console.log(i);
 }
 console.log("---");
-for (let j of arr) {
-  console.log(j);
+arr.push(6);
+arr.push(7);
+console.log(arr);
+
+for (let i of reversedIterator) {
+  console.log(i);
 }

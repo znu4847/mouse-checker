@@ -11,31 +11,15 @@
             @mouseup="mouseup"
             @dblclick="dbclick"
           >
-            test-area
           </div>
         </v-col>
         <v-col>
           <v-btn @click="reset">reset</v-btn>
-          2nd-row
         </v-col>
       </v-row>
       <v-row>
         <v-col>
-          <GChart type="ColumnChart" :data="leftLog" :options="chartOptions" />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <GChart type="ColumnChart" :data="rightLog" :options="chartOptions" />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <GChart
-            type="ColumnChart"
-            :data="middleLog"
-            :options="chartOptions"
-          />
+          <GChart type="ColumnChart" :data="clickLogChart" :options="chartOptions" />
         </v-col>
       </v-row>
     </v-layout>
@@ -43,37 +27,35 @@
 </template>
 
 <script>
+import LogRegister from "@/js/LogRegister.js";
 import { GChart } from "vue-google-charts";
 export default {
   data: () => ({
-    clickLog: [],
-    singleClick: [],
-    dbClick: [],
-    leftClick: [],
-    rightClick: [],
-    middleClick: [],
-    leftLog: [
-      ["click", "single", "double"],
-      ["click", 0, 0]
-    ],
-    rightLog: [
-      ["click", "single", "double"],
-      ["click", 0, 0]
-    ],
-    middleLog: [
-      ["click", "single", "double"],
-      ["click", 0, 0]
-    ],
-
     chartOptions: {
       title: "test",
-      subtitle: "subtitle"
+      subtitle: "subtitle",
+      vAxis: {
+        title: "time",
+        viewWindow: {
+          max: 400,
+          min: 0
+        }
+      }
     },
     preventevent(e) {
       e.preventDefault();
-    }
+    },
+    logRegister: null
   }),
   computed: {
+    clickLogChart() {
+      let clickLogChart = [];
+      clickLogChart.push(["click", "single", "single", "double"]);
+      this.logRegister.clickLogMap[0].forEach(log => {
+        clickLogChart.push(log.chartData);
+      });
+      return clickLogChart;
+    },
     logMap() {
       return {
         0: this.leftLog,
@@ -89,46 +71,27 @@ export default {
       };
     }
   },
+  created() {
+    this.logRegister = new LogRegister();
+  },
   methods: {
     reset() {
-      this.leftLog = [
-        ["click", "single", "double"],
-        ["click", 0, 0]
-      ];
-      this.rightLog = [
-        ["click", "single", "double"],
-        ["click", 0, 0]
-      ];
-      this.middleLog = [
-        ["click", "single", "double"],
-        ["click", 0, 0]
-      ];
+      this.logRegister = new LogRegister();
     },
 
     clickEvent(event) {
       console.log("----- event");
+      console.log(event);
       console.log(event.timeStamp);
     },
     dbclick(event) {
-      console.log("---- dbclick");
-      console.log(event.timeStamp);
+      this.logRegister.addDbClick = event;
     },
     mousedown(event) {
-      let click = this.clickMap[event.button];
-      click.push({
-        down: { timeStamp: event.timeStamp, button: event.button }
-      });
+      this.logRegister.addDown = event;
     },
     mouseup(event) {
-      let clickList = this.clickMap[event.button];
-
-      let click = clickList.pop();
-      click.up = { timeStamp: event.timeStamp, type: event.type };
-      click.type = "single";
-
-      clickList.push(click);
-
-      this.logMap[event.button].push(["single", 1, 0]);
+      this.logRegister.addUp = event;
     }
   },
   components: {
