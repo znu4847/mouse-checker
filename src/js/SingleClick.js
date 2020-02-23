@@ -34,6 +34,7 @@ export default class SingleClick {
   }
 
   get chartData() {
-    return ["click", 0, this.ti, 0, this.til];
+    // return [0, Math.floor(this.ti / 1000), 0, Math.floor(this.til / 1000)];
+    return [this.ti / 1000, 0, 0, this.til / 1000];
   }
 }

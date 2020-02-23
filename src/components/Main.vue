@@ -5,8 +5,8 @@
         <v-col>
           <div
             id="test-area"
-            @contextmenu="preventevent($event)"
-            @click="clickEvent"
+            @contextmenu="$event.preventDefault()"
+            @click="clickEvent($event)"
             @mousedown="mousedown"
             @mouseup="mouseup"
             @dblclick="dbclick"
@@ -19,7 +19,17 @@
       </v-row>
       <v-row>
         <v-col>
-          <GChart type="ColumnChart" :data="clickLogChart" :options="chartOptions" />
+          <GChart type="ColumnChart" :data="leftClickLog" :options="leftChartOption" />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <GChart type="ColumnChart" :data="rightClickLog" :options="rightChartOption" />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <GChart type="ColumnChart" :data="wheelClickLog" :options="wheelChartOption" />
         </v-col>
       </v-row>
     </v-layout>
@@ -28,76 +38,54 @@
 
 <script>
 // import { GChart } from "vue-google-charts";
-import LogRegister from "@/js/LogRegister.js";
+import ClickLogger from "@/js/ClickLogger.js";
 export default {
   data: () => ({
-    chartOptions: {
-      title: "test",
-      subtitle: "subtitle",
-      vAxis: {
-        title: "time"
-      },
-      hAxis: {
-        //maxValue: 10
-        // viewWindowMode: "pretty"
-      }
-    },
     preventevent(e) {
       e.preventDefault();
     },
-    logRegister: null
+    logger: null
   }),
   computed: {
-    clickLogChart() {
-      let clickLogChart = [];
-      clickLogChart.push([
-        "click",
-        "single",
-        "single",
-        "double",
-        "time-interval"
-      ]);
-      this.logRegister.clickLogMap[0].forEach(log => {
-        clickLogChart.push(log.chartData);
-      });
-      return clickLogChart;
+    leftChartOption() {
+      return this.logger.chartOption(0);
     },
-    logMap() {
-      return {
-        0: this.leftLog,
-        1: this.middleLog,
-        2: this.rightLog
-      };
+    rightChartOption() {
+      return this.logger.chartOption(2);
     },
-    clickMap() {
-      return {
-        0: this.leftClick,
-        1: this.middleClick,
-        2: this.rightClick
-      };
+    wheelChartOption() {
+      return this.logger.chartOption(1);
+    },
+
+    leftClickLog() {
+      return this.logger.chartData(0);
+    },
+    rightClickLog() {
+      return this.logger.chartData(2);
+    },
+    wheelClickLog() {
+      return this.logger.chartData(1);
     }
   },
   created() {
-    this.logRegister = new LogRegister();
+    this.logger = new ClickLogger();
   },
   methods: {
     reset() {
-      this.logRegister = new LogRegister();
+      this.logger = new ClickLogger();
     },
 
     clickEvent(event) {
-      console.log("----- event");
-      console.log(event);
-      console.log(event.timeStamp);
+      event.preventDefault();
     },
     dbclick(event) {
-      this.logRegister.addDbClick = event;
+      this.logger.addDbClick = event;
     },
     mousedown(event) {
-      this.logRegister.addDown = event;
+      this.logger.addDown = event;
     },
     mouseup(event) {
-      this.logRegister.addUp = event;
+      this.logger.addUp = event;
     }
   },
   components: {}

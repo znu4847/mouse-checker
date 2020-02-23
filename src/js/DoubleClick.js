@@ -1,9 +1,9 @@
 export default class DoubleClick {
-  constructor(first, second, beforeDbClick) {
+  constructor(first, second, lastClick) {
     this.first = first;
     this.second = second;
     this.type = "double";
-    this.beforeDbClick = beforeDbClick;
+    this.lastClick = lastClick;
   }
 
   get down() {
@@ -15,7 +15,7 @@ export default class DoubleClick {
   }
 
   /**
-   * time-interval
+   * time-diff : first and second
    */
   get tifd() {
     if (this.first === null || this.second === null) {
@@ -24,11 +24,12 @@ export default class DoubleClick {
     return this.second.down.timeStamp - this.first.up.timeStamp;
   }
 
+  /**
+   * time-diff : current dbClick and last click
+   */
   get ti() {
-    if (this.beforeDbClick !== null) {
-      // console.log("this.beforeDbClick is not null!");
-      // console.log(this.beforeDbClick.up.timeStamp - this.first.down.timeStamp);
-      return this.first.down.timeStamp - this.beforeDbClick.up.timeStamp;
+    if (this.lastClick !== null) {
+      return this.first.down.timeStamp - this.lastClick.up.timeStamp;
     }
     return 0;
   }
@@ -41,6 +42,11 @@ export default class DoubleClick {
   }
 
   get chartData() {
-    return ["dbClick", this.first.ti, this.second.ti, this.tifd, this.ti];
+    return [
+      this.first.ti / 1000,
+      this.second.ti / 1000,
+      this.tifd / 1000,
+      this.ti / 1000
+    ];
   }
 }

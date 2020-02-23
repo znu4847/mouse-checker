@@ -31,3 +31,7 @@ let arr8 = [[3, 4, 5]];
 // let arr9 = arr7.concat(arr8);
 let arr9 = [...arr7, ...arr8];
 console.log(arr9);
+let arr10 = [6, 7, 8];
+
+let arr11 = [10, ...arr10];
+console.log(arr11);

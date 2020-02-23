@@ -36,7 +36,11 @@ export default {
       title: "test",
       subtitle: "subtitle",
       explorer: {
-        axis: "horizontal"
+        axis: "horizontal",
+        maxZoomIn: 1,
+        maxZoomOut: 1
+        // keepInBounds: true
+        // actions: ["dragToZoom", "rightClickToReset"]
       },
       vAxis: {
         title: "time",
@@ -46,11 +50,11 @@ export default {
         }
       },
       hAxis: {
-        //maxValue: 10
-        // viewWindowMode: "pretty"
-        // viewWindow: {
-        //   min: 10
-        // }
+        viewWindowMode: "pretty",
+        viewWindow: {
+          min: 0,
+          max: 10
+        }
       }
     }
   }),
@@ -61,16 +65,14 @@ export default {
         .map((_, i) => [i + "g", (i % 3) + 2, (i % 2) + 2, (i % 7) + 1]);
       let head = [["groupNumber", "down", "up", "inter"]];
       let cChartDataL = [...head, ...dummyData];
-      console.log(cChartDataL);
       return cChartDataL;
     },
     cChartDataS() {
       let dummyData = Array(60)
         .fill()
-        .map((_, i) => [i, (i % 3) + 2, (i % 2) + 2, (i % 7) + 1]);
+        .map((_, i) => [i + 1, (i % 3) + 2, (i % 2) + 2, (i % 7) + 1]);
       let head = [["groupNumber", "down", "up", "inter"]];
       let cChartDataL = [...head, ...dummyData];
-      console.log(cChartDataL);
       return cChartDataL;
     }
   },

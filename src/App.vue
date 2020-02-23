@@ -24,7 +24,7 @@ import GChartTest from "./components/GChartTest.vue";
 export default {
   name: "App",
   data: () => ({
-    currentTabComponent: "GChartTest"
+    currentTabComponent: "Main"
   }),
   components: {
     Main,
