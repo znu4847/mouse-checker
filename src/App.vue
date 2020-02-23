@@ -1,16 +1,34 @@
 <template>
   <div id="app">
-    <Main />
+    <v-app-bar>
+      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      <v-toolbar-title>MouseChecker</v-toolbar-title>
+
+      <template v-slot:extension>
+        <v-tabs align-with-title>
+          <v-tab @click="currentTabComponent = 'Main'">ClickChecker</v-tab>
+          <v-tab @click="currentTabComponent = 'GChartTest'">GChartTest</v-tab>
+        </v-tabs>
+      </template>
+
+
+    </v-app-bar>
+    <component v-bind:is="currentTabComponent"></component>
   </div>
 </template>
 
 <script>
 import Main from "./components/Main.vue";
+import GChartTest from "./components/GChartTest.vue";
 
 export default {
   name: "App",
+  data: () => ({
+    currentTabComponent: "GChartTest"
+  }),
   components: {
-    Main
+    Main,
+    GChartTest
   }
 };
 </script>

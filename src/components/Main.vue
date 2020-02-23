@@ -27,19 +27,19 @@
 </template>
 
 <script>
+// import { GChart } from "vue-google-charts";
 import LogRegister from "@/js/LogRegister.js";
-import { GChart } from "vue-google-charts";
 export default {
   data: () => ({
     chartOptions: {
       title: "test",
       subtitle: "subtitle",
       vAxis: {
-        title: "time",
-        viewWindow: {
-          max: 400,
-          min: 0
-        }
+        title: "time"
+      },
+      hAxis: {
+        //maxValue: 10
+        // viewWindowMode: "pretty"
       }
     },
     preventevent(e) {
@@ -50,7 +50,13 @@ export default {
   computed: {
     clickLogChart() {
       let clickLogChart = [];
-      clickLogChart.push(["click", "single", "single", "double"]);
+      clickLogChart.push([
+        "click",
+        "single",
+        "single",
+        "double",
+        "time-interval"
+      ]);
       this.logRegister.clickLogMap[0].forEach(log => {
         clickLogChart.push(log.chartData);
       });
@@ -94,9 +100,7 @@ export default {
       this.logRegister.addUp = event;
     }
   },
-  components: {
-    GChart
-  }
+  components: {}
 };
 </script>
 

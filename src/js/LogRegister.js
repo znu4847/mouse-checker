@@ -53,6 +53,12 @@ export default class LogRegister {
     let clickLogList = this.clickLogMap[event.button];
     let second = clickLogList.pop();
     let first = clickLogList.pop();
-    this.clickLogMap[event.button].push(new DoubleClick(first, second));
+
+    let beforeDbClick = null;
+    if (clickLogList.length > 0) {
+      beforeDbClick = clickLogList[clickLogList.length - 1];
+    }
+
+    clickLogList.push(new DoubleClick(first, second, beforeDbClick));
   }
 }
