@@ -1,12 +1,14 @@
 <template>
-  <div id="app">
-    <v-toolbar>
-      <v-toolbar-title>
-        Mouse Checker
-      </v-toolbar-title>
-    </v-toolbar>
-    <component v-bind:is="currentTabComponent"></component>
-  </div>
+  <v-app>
+    <div id="app">
+      <v-toolbar>
+        <v-toolbar-title>
+          Mouse Checker
+        </v-toolbar-title>
+      </v-toolbar>
+      <component v-bind:is="currentTabComponent"></component>
+    </div>
+  </v-app>
 </template>
 
 <script>

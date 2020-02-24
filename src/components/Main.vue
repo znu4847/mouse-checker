@@ -3,37 +3,84 @@
     <v-layout column>
       <v-row
         @contextmenu="$event.preventDefault()"
-        id="test-area"
         @click="clickEvent($event)"
         @mousedown="mousedown"
         @mouseup="mouseup"
         @dblclick="dbclick"
       >
-        <v-col cols="12" md="4">
-          <v-item v-slot:default="{ toggle }">
-            <v-card
-              :color="leftActive ? 'primary' : ''"
-              height="200px"
-              class="d-flex align-center"
-              @click="toggle"
-            >
-              <v-scroll-y-transition>
-                <div
-                  v-if="leftActive"
-                  class="display-4 flex-grow-1 text-center"
+        <v-col>
+          <v-card tile color="#00cc99">
+            <v-row style="padding-left:10px;padding-right:10px">
+              <v-col cols="12" md="4">
+                <v-card
+                  @contextmenu="$event.preventDefault()"
+                  :color="leftActive ? 'orange' : ''"
+                  height="120px"
+                  class="d-flex align-center"
+                  outlined
+                  :elevation="leftActive ? 0 : 5"
                 >
-                  Active
-                </div>
-              </v-scroll-y-transition>
-            </v-card>
-          </v-item>
+                  <v-scroll-y-reverse-transition>
+                    <div
+                      v-if="leftActive"
+                      class="display-3 flex-grow-1 text-center"
+                    >
+                      Left
+                    </div>
+                  </v-scroll-y-reverse-transition>
+                </v-card>
+              </v-col>
+              <v-col>
+                <v-card
+                  @contextmenu="$event.preventDefault()"
+                  :color="wheelActive ? 'orange' : ''"
+                  height="120px"
+                  class="d-flex align-center"
+                  outlined
+                  :elevation="wheelActive ? 0 : 5"
+                >
+                  <v-scroll-y-reverse-transition>
+                    <div
+                      v-if="wheelActive"
+                      class="display-3 flex-grow-1 text-center"
+                    >
+                      Wheel
+                    </div>
+                  </v-scroll-y-reverse-transition>
+                </v-card>
+              </v-col>
+              <v-col>
+                <v-card
+                  :color="rightActive ? 'orange' : ''"
+                  height="120px"
+                  class="d-flex align-center"
+                  outlined
+                  :elevation="rightActive ? 0 : 5"
+                >
+                  <v-scroll-y-reverse-transition>
+                    <div
+                      v-if="rightActive"
+                      class="display-3 flex-grow-1 text-center"
+                      @contextmenu="$event.preventDefault()"
+                    >
+                      Right
+                    </div>
+                  </v-scroll-y-reverse-transition>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-card>
         </v-col>
-        <!--
-        <v-col class="wheel-click-div">
+      </v-row>
+      <v-row>
+        <v-col>
+          click any box
         </v-col>
-        <v-col class="right-click-div">
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-btn @click="reset">RESET</v-btn>
         </v-col>
-        -->
       </v-row>
       <v-row>
         <v-col>
@@ -70,6 +117,7 @@
 import ClickLogger from "@/js/ClickLogger.js";
 export default {
   data: () => ({
+    panel: [0, 1, 2],
     leftActive: false,
     rightActive: false,
     wheelActive: false,
@@ -127,7 +175,7 @@ export default {
     mouseup(event) {
       const btn = event.button;
       if (btn === 0) {
-        // this.leftActive = false;
+        this.leftActive = false;
       } else if (btn === 2) {
         this.rightActive = false;
       } else if (btn === 1) {
