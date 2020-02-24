@@ -83,10 +83,5 @@ export default {
 };
 </script>
 
-<style>
-#test-area {
-  background-color: coral;
-  width: 300px;
-  height: 300px;
-}
+<style scoped>
 </style>

@@ -37,7 +37,6 @@ export default class ClickLogger {
 
   set addUp(upEvt) {
     const button = upEvt.button;
-    console.log(button);
     let logList = this.totalLogMap[button];
     let clickList = this.clickLogMap[button];
     let lastClick = null;
@@ -81,6 +80,7 @@ export default class ClickLogger {
     });
     return chartData;
   }
+
   chartDataRW(button) {
     let buttonLogs = this.clickLogMap[button];
     let chartData = [
@@ -126,10 +126,17 @@ export default class ClickLogger {
         title: "time-diff",
         viewWindow: {
           min: 0,
-          max: 1
+          max: 0.8
         }
       },
       hAxis: {
+        gridlines: {
+          count: 1
+          // interval: 1
+        },
+        legend: { position: "top", textStyle: { color: "blue", fontSize: 16 } },
+        // showTextEvery: true,
+        isStacked: true,
         viewWindowMode: "pretty",
         viewWindow: {
           min: hMin,

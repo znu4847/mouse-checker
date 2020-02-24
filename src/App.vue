@@ -1,18 +1,10 @@
 <template>
   <div id="app">
-    <v-app-bar>
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
-      <v-toolbar-title>MouseChecker</v-toolbar-title>
-
-      <template v-slot:extension>
-        <v-tabs align-with-title>
-          <v-tab @click="currentTabComponent = 'Main'">ClickChecker</v-tab>
-          <v-tab @click="currentTabComponent = 'GChartTest'">GChartTest</v-tab>
-        </v-tabs>
-      </template>
-
-
-    </v-app-bar>
+    <v-toolbar>
+      <v-toolbar-title>
+        Mouse Checker
+      </v-toolbar-title>
+    </v-toolbar>
     <component v-bind:is="currentTabComponent"></component>
   </div>
 </template>
@@ -20,6 +12,7 @@
 <script>
 import Main from "./components/Main.vue";
 import GChartTest from "./components/GChartTest.vue";
+import ItemGroup from "./components/ItemGroup.vue";
 
 export default {
   name: "App",
@@ -28,7 +21,8 @@ export default {
   }),
   components: {
     Main,
-    GChartTest
+    GChartTest,
+    ItemGroup
   }
 };
 </script>
@@ -40,6 +34,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  /** margin-top: 60px; */
 }
 </style>

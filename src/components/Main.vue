@@ -1,35 +1,65 @@
 <template>
   <v-container>
     <v-layout column>
+      <v-row
+        @contextmenu="$event.preventDefault()"
+        id="test-area"
+        @click="clickEvent($event)"
+        @mousedown="mousedown"
+        @mouseup="mouseup"
+        @dblclick="dbclick"
+      >
+        <v-col cols="12" md="4">
+          <v-item v-slot:default="{ toggle }">
+            <v-card
+              :color="leftActive ? 'primary' : ''"
+              height="200px"
+              class="d-flex align-center"
+              @click="toggle"
+            >
+              <v-scroll-y-transition>
+                <div
+                  v-if="leftActive"
+                  class="display-4 flex-grow-1 text-center"
+                >
+                  Active
+                </div>
+              </v-scroll-y-transition>
+            </v-card>
+          </v-item>
+        </v-col>
+        <!--
+        <v-col class="wheel-click-div">
+        </v-col>
+        <v-col class="right-click-div">
+        </v-col>
+        -->
+      </v-row>
       <v-row>
         <v-col>
-          <div
-            id="test-area"
-            @contextmenu="$event.preventDefault()"
-            @click="clickEvent($event)"
-            @mousedown="mousedown"
-            @mouseup="mouseup"
-            @dblclick="dbclick"
-          >
-          </div>
-        </v-col>
-        <v-col>
-          <v-btn @click="reset">reset</v-btn>
+          <GChart
+            type="ColumnChart"
+            :data="leftClickLog"
+            :options="leftChartOption"
+          />
         </v-col>
       </v-row>
       <v-row>
         <v-col>
-          <GChart type="ColumnChart" :data="leftClickLog" :options="leftChartOption" />
+          <GChart
+            type="ColumnChart"
+            :data="rightClickLog"
+            :options="rightChartOption"
+          />
         </v-col>
       </v-row>
       <v-row>
         <v-col>
-          <GChart type="ColumnChart" :data="rightClickLog" :options="rightChartOption" />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <GChart type="ColumnChart" :data="wheelClickLog" :options="wheelChartOption" />
+          <GChart
+            type="ColumnChart"
+            :data="wheelClickLog"
+            :options="wheelChartOption"
+          />
         </v-col>
       </v-row>
     </v-layout>
@@ -37,10 +67,12 @@
 </template>
 
 <script>
-// import { GChart } from "vue-google-charts";
 import ClickLogger from "@/js/ClickLogger.js";
 export default {
   data: () => ({
+    leftActive: false,
+    rightActive: false,
+    wheelActive: false,
     preventevent(e) {
       e.preventDefault();
     },
@@ -82,9 +114,25 @@ export default {
       this.logger.addDbClick = event;
     },
     mousedown(event) {
+      const btn = event.button;
+      if (btn === 0) {
+        this.leftActive = true;
+      } else if (btn === 2) {
+        this.rightActive = true;
+      } else if (btn === 1) {
+        this.wheelActive = true;
+      }
       this.logger.addDown = event;
     },
     mouseup(event) {
+      const btn = event.button;
+      if (btn === 0) {
+        // this.leftActive = false;
+      } else if (btn === 2) {
+        this.rightActive = false;
+      } else if (btn === 1) {
+        this.wheelActive = false;
+      }
       this.logger.addUp = event;
     }
   },
@@ -95,7 +143,11 @@ export default {
 <style>
 #test-area {
   background-color: coral;
-  width: 300px;
-  height: 300px;
+}
+.right-click-div {
+  background-color: green;
+}
+.wheel-click-div {
+  background-color: black;
 }
 </style>
